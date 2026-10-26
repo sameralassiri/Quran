@@ -55,6 +55,20 @@ h1{font-family:"AmiriQ",serif;font-size:30px;text-align:center;margin:6px 0 0;co
 .it b{color:var(--green);white-space:nowrap}
 .it span{font-family:"AmiriQ",serif;font-size:18px;flex:1}
 #st{font-size:13px;color:var(--mute);line-height:1.9;margin-top:8px}
+.bar button:not(#toggle){padding:8px 7px}
+.v.playing{background:#d4a01733}
+.pv{font-family:Tahoma,sans-serif;font-size:.55em;color:var(--green);cursor:pointer;padding:0 6px}
+.sm .pv{display:none}
+#pbar{position:fixed;inset:auto 0 0 0;z-index:15;background:var(--card);border-top:1px solid var(--line);padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));display:none;box-shadow:0 -4px 16px #0003}
+#pbar.show{display:block}
+#pbar .r1,#pbar .r2{display:flex;gap:6px;align-items:center}
+#pbar .r2{margin-top:6px}
+#pbar select{flex:1;min-width:0;padding:6px 6px;font-size:13px}
+#pbar button{padding:8px 10px}
+#pp{background:var(--green);color:#fff;border-color:var(--green);font-weight:bold;white-space:nowrap}
+#pst{flex:1;min-width:0;font-size:12px;color:var(--mute);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#aL.on{background:var(--green);color:#fff;border-color:var(--green)}
+body.ap main{padding-bottom:150px}
 </style>
 </head>
 <body>
@@ -64,6 +78,7 @@ h1{font-family:"AmiriQ",serif;font-size:30px;text-align:center;margin:6px 0 0;co
   <button id="rnd" title="آية عشوائية">🎲</button>
   <button id="bS" title="بحث">🔍</button>
   <button id="bB" title="العلامات">🔖</button>
+  <button id="bA" title="الاستماع">🎧</button>
   <button id="bG" title="الإعدادات">⚙</button>
 </div>
 <main>
@@ -73,6 +88,10 @@ h1{font-family:"AmiriQ",serif;font-size:30px;text-align:center;margin:6px 0 0;co
   <div class="nav"><button id="prev">السورة السابقة</button><button id="memb"></button><button id="next">السورة التالية</button></div>
   <div class="hint">في وضع الإخفاء: اضغط على الآية لإظهار كلمة إضافية في كل مرة، وعند اكتمالها اضغط لإخفائها من جديد.</div>
 </main>
+<div id="pbar">
+  <div class="r1"><button id="aB" title="الآية السابقة (أو ١٥ ثانية للخلف)">→</button><button id="pp">▶ استماع</button><button id="aN" title="الآية التالية (أو ١٥ ثانية للأمام)">←</button><button id="aS" title="إيقاف">⏹</button><div id="pst"></div></div>
+  <div class="r2"><select id="aR" aria-label="القارئ"></select><select id="aRep" aria-label="التكرار"><option value="1">تكرار ×١</option><option value="2">×٢</option><option value="3">×٣</option><option value="5">×٥</option><option value="10">×١٠</option></select><select id="aSp" aria-label="السرعة"><option value="0.75">0.75x</option><option value="1">1x</option><option value="1.25">1.25x</option><option value="1.5">1.5x</option></select><button id="aL" title="إعادة النطاق عند الانتهاء">🔁</button></div>
+</div>
 <section class="sheet" id="sh-s"><div class="hd"><b>بحث في المصحف</b><button class="x">✕</button></div>
   <input type="search" id="q" placeholder="اكتب كلمة أو جزءاً من آية (دون تشكيل)"><div id="res"></div></section>
 <section class="sheet" id="sh-b"><div class="hd"><b>العلامات المرجعية</b><button class="x">✕</button></div><div id="bl"></div></section>
@@ -115,13 +134,16 @@ function build(){
     const e=document.createElement("span");e.className="end";e.textContent="﴿"+num(k)+"﴾";
     const st=document.createElement("span"),key=S.s+":"+k,on=S.bm.includes(key);
     st.className="star"+(on?" on":"");st.dataset.k=key;st.textContent=on?"★":"☆";
-    v.append(ph,e,st);txt.append(v," ");
+    const pv=document.createElement("span");pv.className="pv";pv.dataset.k=k;pv.textContent="▶";pv.title="استماع من هذه الآية";
+    v.append(ph,e,st,pv);txt.append(v," ");
   }
+  txt.classList.toggle("sm",isS());mark(act&&!isS()?cur:0,true);
 }
-function go(si,k){S.s=si;rf=1;rt=999;S.y=0;save();fill();build();closeAll();
+function go(si,k){stopA();S.s=si;rf=1;rt=999;S.y=0;save();fill();build();closeAll();
   if(k){const e=$("v"+k);if(e){e.scrollIntoView({block:"center"});e.classList.add("flash")}}else window.scrollTo(0,0)}
 txt.onclick=e=>{
   const t=e.target;
+  if(t.classList.contains("pv")){$("pbar").classList.add("show");document.body.classList.add("ap");playV(+t.dataset.k);return}
   if(t.classList.contains("star")){const k=t.dataset.k,i=S.bm.indexOf(k);i<0?S.bm.push(k):S.bm.splice(i,1);t.classList.toggle("on",i<0);t.textContent=i<0?"★":"☆";save();return}
   const v=t.closest(".v");if(!v||!S.hidden)return;
   const h=v.querySelector(".w.h");
@@ -163,6 +185,61 @@ document.addEventListener("visibilitychange",wake);
 $("exp").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="quran-progress.json";a.click()};
 $("imp").onchange=async e=>{try{Object.assign(S,JSON.parse(await e.target.files[0].text()));save();location.reload()}catch(x){alert("ملف غير صالح")}};
 let tm;window.addEventListener("scroll",()=>{clearTimeout(tm);tm=setTimeout(()=>{S.y=Math.round(scrollY);save()},400)});
+
+/* ===== الاستماع ===== */
+const AU=new Audio(),PN=new Audio();PN.preload="auto";
+const RC={
+  sds:{n:"الشيخ عبدالرحمن السديس",a:"https://everyayah.com/data/Abdurrahmaan_As-Sudais_192kbps/"},
+  jl:{n:"الشيخ خالد الجليل",s:"https://server10.mp3quran.net/jleel/"}
+};
+if(!RC[S.rc])S.rc="sds";S.rep=+S.rep||1;S.sp=+S.sp||1;S.loop=!!S.loop;
+let cur=0,rp=0,act=false;
+const p3=n=>String(n).padStart(3,"0"),isS=()=>!!RC[S.rc].s;
+const aurl=k=>{const r=RC[S.rc];return r.a?r.a+p3(S.s+1)+p3(k)+".mp3":r.s+p3(S.s+1)+".mp3"};
+const rng=()=>[Math.max(1,rf),Math.min(Q[S.s].v.length,rt)];
+function mark(k,ns){document.querySelectorAll(".v.playing").forEach(x=>x.classList.remove("playing"));if(!k)return;const e=$("v"+k);if(e){e.classList.add("playing");if(!ns)e.scrollIntoView({block:"center",behavior:"smooth"})}}
+function sst(t){$("pst").textContent=t}
+function info(){
+  if(!act){sst("");return}
+  const r=S.rep>1?" – ×"+num(rp+1)+"/"+num(S.rep):"";
+  sst(isS()?"سورة "+Q[S.s].n+r:"آية "+num(cur)+" من "+num(rng()[1])+r)}
+function meta(){try{if("mediaSession" in navigator)navigator.mediaSession.metadata=new MediaMetadata({title:"سورة "+Q[S.s].n+(isS()?"":" – آية "+num(cur)),artist:RC[S.rc].n,album:"المصحف"})}catch(e){}}
+function ld(u){AU.src=u;AU.defaultPlaybackRate=AU.playbackRate=S.sp}
+function run(){const p=AU.play();if(p)p.catch(x=>{if(x&&x.name==="NotAllowedError")sst("اضغط تشغيل للبدء")})}
+function pre(){if(!isS()&&cur<rng()[1])PN.src=aurl(cur+1)}
+function ppl(){$("pp").textContent=(act&&!AU.paused)?"⏸ إيقاف مؤقت":"▶ استماع"}
+function playV(k){
+  const [a,b]=rng();act=true;rp=0;
+  if(isS()){cur=0;ld(aurl())}else{cur=Math.min(Math.max(k||a,a),b);ld(aurl(cur));pre()}
+  mark(isS()?0:cur);meta();info();run()}
+function stopA(){act=false;AU.pause();AU.removeAttribute("src");AU.load();mark(0);info();ppl()}
+function goV(n){cur=n;rp=0;ld(aurl(cur));mark(cur);meta();info();pre();run()}
+function step(d){
+  if(!act)return;
+  if(isS()){AU.currentTime=Math.max(0,AU.currentTime+15*d);return}
+  const [a,b]=rng(),n=cur+d;if(n>=a&&n<=b)goV(n)}
+AU.onplay=AU.onpause=ppl;
+AU.onplaying=info;
+AU.onwaiting=()=>{if(act)sst("جارٍ التحميل…")};
+AU.onerror=()=>{if(act)sst("تعذّر تحميل الصوت – تحقق من الاتصال أو جرّب قارئاً آخر")};
+AU.onended=()=>{
+  if(!act)return;
+  if(++rp<S.rep){info();AU.currentTime=0;run();return}
+  rp=0;
+  if(isS()){if(S.loop){info();AU.currentTime=0;run()}else stopA();return}
+  const [a,b]=rng();
+  if(cur<b)goV(cur+1);else if(S.loop)goV(a);else stopA()};
+$("pp").onclick=()=>{if(!act){playV(0);return}AU.paused?run():AU.pause()};
+$("aS").onclick=stopA;$("aB").onclick=()=>step(-1);$("aN").onclick=()=>step(1);
+$("aR").innerHTML=Object.keys(RC).map(k=>'<option value="'+k+'">'+RC[k].n+'</option>').join("");
+$("aR").value=S.rc;$("aRep").value=S.rep;$("aSp").value=S.sp;$("aL").classList.toggle("on",S.loop);
+$("aR").onchange=e=>{const was=act&&!AU.paused,k=cur;S.rc=e.target.value;save();stopA();txt.classList.toggle("sm",isS());if(was)playV(k)};
+$("aRep").onchange=e=>{S.rep=+e.target.value;save();rp=0;info()};
+$("aSp").onchange=e=>{S.sp=+e.target.value;save();AU.defaultPlaybackRate=AU.playbackRate=S.sp};
+$("aL").onclick=()=>{S.loop=!S.loop;save();$("aL").classList.toggle("on",S.loop)};
+$("bA").onclick=()=>{const v=$("pbar").classList.toggle("show");document.body.classList.toggle("ap",v);if(!v)stopA()};
+try{if("mediaSession" in navigator){const m=navigator.mediaSession;m.setActionHandler("play",run);m.setActionHandler("pause",()=>AU.pause());m.setActionHandler("previoustrack",()=>step(-1));m.setActionHandler("nexttrack",()=>step(1))}}catch(e){}
+/* ===== نهاية الاستماع ===== */
 $("keep").value=S.keep;$("fs").value=S.fs;$("theme").value=S.theme;$("wake").checked=S.wake;
 theme();fill();build();wake();window.scrollTo(0,S.y||0);
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
