@@ -92,6 +92,38 @@ body.ap main{padding-bottom:150px}
 :root[data-theme="night"]{--bg:#000;--fg:#e8e6df;--card:#0c0c0c;--line:#2a2a2a;--green:#d4a017;--red:#ff8a80;--mute:#8a8a80}
 :root[data-theme="gold"]{--bg:#fff8e6;--fg:#2d2108;--card:#fffdf5;--line:#e6d29a;--green:#9a6b00;--red:#a33a1f;--mute:#98865a}
 body.pat{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 6l8 22 22-8-14 20 14 20-22-8-8 22-8-22-22 8 14-20-14-20 22 8z' fill='none' stroke='%23888' stroke-opacity='.2'/%3E%3C/svg%3E")}
+#sh-gm{max-height:92vh}
+.gmb{display:flex;width:100%;justify-content:space-between;align-items:center;gap:8px;margin:4px 0 10px;padding:10px 14px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:15px;font-weight:bold;color:var(--green)}
+.gmb small{font-weight:normal;color:var(--mute);font-size:12px}
+.gh{background:var(--green);color:var(--bg);border-radius:16px;padding:14px 16px;margin-bottom:10px;text-align:center}
+.gh .qv{margin:6px 0}
+.gh .row{justify-content:center}
+.gh button{background:transparent;color:var(--bg);border-color:var(--bg);font-size:13px}
+.gg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.gc{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:right;padding:12px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.gc .ic{font-size:24px}
+.gc b{font-size:14px}
+.gc small{color:var(--mute);font-size:11px;line-height:1.5}
+.gc.w2{grid-column:1/-1}
+.qv{font-family:"AmiriQ",serif;font-size:24px;line-height:2.2;text-align:center}
+.gq{font-family:Tahoma,sans-serif;font-size:17px;line-height:1.9;text-align:center;margin:8px 0}
+.blank{display:inline-block;min-width:3.5em;border-bottom:2px solid var(--green);color:var(--green);text-align:center}
+.fil{color:var(--green);font-weight:bold}
+.gtop{align-items:center;margin:0 0 10px}
+.gst{display:block;width:100%;margin-top:10px;background:var(--green);color:var(--bg);border-color:var(--green);font-weight:bold}
+.gf{margin-top:10px}
+.gf>button{width:100%;margin-top:8px}
+.gf .row>button{flex:1}
+.xc .row>button{flex:1}
+.hl{text-align:right;line-height:2;margin-bottom:6px}
+.wd{border-bottom:1px dotted var(--green);cursor:help}
+.tl{border-right:3px solid var(--line);margin:12px 22px 0 0;padding-right:16px}
+.tli{position:relative;padding:8px 0;cursor:pointer}
+.tli i{position:absolute;right:-31px;top:8px;width:24px;height:24px;border-radius:50%;background:var(--green);color:var(--bg);font-style:normal;font-size:12px;display:flex;align-items:center;justify-content:center}
+.tli .td{display:none;font-size:13px;color:var(--mute);line-height:1.9;margin-top:4px}
+.tli.op .td{display:block}
+.tli.op b{color:var(--green)}
+.opts.qf button{font-family:"AmiriQ",serif;font-size:22px}
 </style>
 </head>
 <body>
@@ -471,6 +503,581 @@ function tMore(){
  $("th2").value=S.theme;$("th2").onchange=e=>{S.theme=e.target.value;save();theme();$("theme").value=S.theme};
  $("pt").onchange=e=>{S.xp=e.target.checked;save();document.body.classList.toggle("pat",S.xp)}}
 document.body.classList.toggle("pat",!!S.xp);
+
+})();
+</script>
+<script>
+/* ===== الألعاب والمسابقات ===== */
+(()=>{
+const SC=[["juz","جزء عمّ"],["cur","السورة المفتوحة الآن"],["mem","السور التي حفظتها"],["all","كل المصحف"]];
+const VOD=[[94,5],[94,6],[13,28],[2,152],[55,13],[93,3],[93,5],[93,6],[112,1],[108,1],[49,10],[29,69],[94,7],[20,25]];
+const PL={
+pr:["آدم","إدريس","نوح","هود","صالح","إبراهيم","لوط","إسماعيل","يعقوب","يوسف","أيوب","شعيب","موسى","هارون","داود","سليمان","يونس","زكريا","يحيى","عيسى","محمد ﷺ"],
+an:["الهدهد","النملة","النحل","الغراب","العنكبوت","الحوت","الفيل","الناقة"],
+pl:["الكعبة","غار حراء","جبل الطور","المسجد الأقصى","جبل الجودي","مصر"],
+wm:["مريم","امرأة فرعون","ملكة سبأ","أم موسى","امرأة عمران"]
+};
+const RD=[
+{a:"آدم",p:"pr",h:["أول البشر، خلقه الله بيده","أمر الله الملائكة أن تسجد له","أُسكن الجنة هو وزوجه ثم أُهبطا إلى الأرض"],e:"آدم عليه السلام، وقصته في سورتي البقرة والأعراف."},
+{a:"نوح",p:"pr",h:["صنع سفينة عظيمة بأمر الله","كذّبه قومه فأغرقهم الطوفان","دعا قومه ألف سنة إلا خمسين عاماً"],e:"نوح عليه السلام، وفي القرآن سورة باسمه."},
+{a:"إبراهيم",p:"pr",h:["وصفه الله بأنه خليله","حطّم أصنام قومه إلا كبيراً لهم","أُلقي في النار فجعلها الله عليه برداً وسلاماً"],e:"إبراهيم عليه السلام، وفي القرآن سورة باسمه."},
+{a:"يوسف",p:"pr",h:["رأى في المنام أحد عشر كوكباً والشمس والقمر ساجدين له","ألقاه إخوته في البئر","صار عزيز مصر وعفا عن إخوته"],e:"يوسف عليه السلام، وقصته كاملة في سورة يوسف."},
+{a:"موسى",p:"pr",h:["كلّمه الله تكليماً","ألقته أمه في اليم فربّاه آل فرعون","ضرب البحر بعصاه فانفلق"],e:"موسى عليه السلام، أكثر الأنبياء ذكراً في القرآن."},
+{a:"عيسى",p:"pr",h:["وُلد من غير أب","تكلّم في المهد","أحيا الموتى بإذن الله"],e:"عيسى عليه السلام، ابن مريم."},
+{a:"يونس",p:"pr",h:["يُلقّب بذي النون","ابتلعه حوت عظيم","نادى في الظلمات: لا إله إلا أنت سبحانك"],e:"يونس عليه السلام، وفي القرآن سورة باسمه."},
+{a:"سليمان",p:"pr",h:["سخّر الله له الريح والجن","علّمه الله منطق الطير","كتب إلى ملكة سبأ"],e:"سليمان عليه السلام، وقصته في سورة النمل."},
+{a:"أيوب",p:"pr",h:["مثال الصبر على المرض","نادى ربه: أني مسّني الضر","ركض برجله فنبع ماء بارد شفاه الله به"],e:"أيوب عليه السلام، في سورتي الأنبياء وص."},
+{a:"داود",p:"pr",h:["أُنزل عليه الزبور","ألان الله له الحديد","قتل جالوت"],e:"داود عليه السلام، والد سليمان."},
+{a:"محمد ﷺ",p:"pr",h:["آخر الأنبياء والمرسلين","وُلد في مكة المكرمة","نزل عليه القرآن الكريم"],e:"محمد رسول الله ﷺ، خاتم النبيين."},
+{a:"صالح",p:"pr",h:["أُرسل إلى قوم ثمود","جاءهم بآية: ناقة الله","عقروا الناقة فأهلكهم الله"],e:"صالح عليه السلام، وقصته في الأعراف وهود والشعراء."},
+{a:"زكريا",p:"pr",h:["نبي كفل مريم","نادى ربه نداءً خفياً","بُشّر بغلام اسمه يحيى"],e:"زكريا عليه السلام، في سورتي مريم وآل عمران."},
+{a:"الهدهد",p:"an",h:["طائر من جنود سليمان","تفقّده سليمان فلم يجده","جاءه بنبأ يقين من سبأ"],e:"الهدهد في قصة سليمان عليه السلام، سورة النمل."},
+{a:"النملة",p:"an",h:["مخلوق صغير ذُكر في سورة تحمل اسمه","نبّهت قومها لمّا رأت جنود سليمان","قالت: ادخلوا مساكنكم"],e:"النملة في سورة النمل."},
+{a:"النحل",p:"an",h:["أوحى الله إليه أن يتخذ بيوتاً في الجبال والشجر","يخرج من بطونه شراب مختلف ألوانه","في شرابه شفاء للناس"],e:"النحل، وفي القرآن سورة باسمه."},
+{a:"الغراب",p:"an",h:["طائر بعثه الله لأحد ابني آدم","بحث في الأرض","علّمه كيف يواري سوأة أخيه"],e:"الغراب في قصة ابني آدم، سورة المائدة."},
+{a:"العنكبوت",p:"an",h:["في القرآن سورة باسمه","اتخذ بيتاً","أوهن البيوت بيته"],e:"العنكبوت، وفي القرآن سورة باسمه."},
+{a:"الكعبة",p:"pl",h:["أول بيت وُضع للناس","رفع قواعده إبراهيم وإسماعيل","يتجه إليها المسلمون في صلاتهم"],e:"الكعبة المشرّفة في مكة المكرمة."},
+{a:"غار حراء",p:"pl",h:["مكان في جبل قرب مكة","كان النبي ﷺ يتعبّد فيه","نزل فيه أول الوحي"],e:"غار حراء، حيث نزلت أول آيات من سورة العلق."},
+{a:"مريم",p:"wm",h:["امرأة اصطفاها الله على نساء العالمين","قيل لها: هزّي إليك بجذع النخلة","أمّ نبي الله عيسى"],e:"مريم عليها السلام، وفي القرآن سورة باسمها."}
+];
+const TF=[
+["بنى نوح عليه السلام السفينة بأمر الله ووحيه.",true,"ورد ذلك في سورة هود."],
+["ابتلع الحوتُ النبيَّ موسى عليه السلام.",false,"الذي ابتلعه الحوت هو يونس عليه السلام، وقصته في سورة الصافات."],
+["كلّم الله موسى عليه السلام تكليماً.",true,"ولذلك يُلقّب بكليم الله، وجاء ذلك في سورة النساء."],
+["جعل الله النار برداً وسلاماً على إبراهيم عليه السلام.",true,"في سورة الأنبياء."],
+["ألقى إخوةُ يوسف أخاهم في البئر.",true,"في سورة يوسف."],
+["سخّر الله الريح لداود عليه السلام.",false,"سخّر الله الريح لسليمان عليه السلام، وألان الحديد لداود."],
+["أُنزل الزبور على داود عليه السلام.",true,"ذُكر ذلك في سورة النساء."],
+["وُلد عيسى عليه السلام من أب.",false,"وُلد من أمه مريم بقدرة الله دون أب، في سورتي مريم وآل عمران."],
+["نام أصحاب الكهف في كهفهم ثلاثمائة سنين وازدادوا تسعاً.",true,"في سورة الكهف."],
+["بنى ذو القرنين سدّاً يحجز يأجوج ومأجوج.",true,"في سورة الكهف."],
+["الهدهد هو الذي جاء سليمان بخبر مملكة سبأ.",true,"في سورة النمل."],
+["أُرسل هود عليه السلام إلى قوم ثمود.",false,"أُرسل هود إلى قوم عاد، وأُرسل صالح إلى قوم ثمود."],
+["كانت آية نبي الله صالح ناقة.",true,"ناقة الله، في سورتي الأعراف وهود."],
+["خُلق آدم عليه السلام من نور.",false,"خلقه الله من طين، كما في سورتي الأعراف وص."],
+["صبر أيوب عليه السلام على المرض فشفاه الله.",true,"في سورتي الأنبياء وص."],
+["استقرت سفينة نوح على جبل الجودي.",true,"في سورة هود."],
+["أمر الله بني إسرائيل أن يذبحوا بقرة.",true,"ومن هذه القصة سُمّيت سورة البقرة."],
+["ضرب موسى البحر بعصاه فانفلق.",true,"في سورة الشعراء."],
+["آمن فرعون بموسى قبل أن يغرق فنجا.",false,"أغرقه الله وجنوده، ولم يُقبل إيمانه عند الغرق، في سورة يونس."],
+["رُزق زكريا عليه السلام بيحيى وهو كبير في السن.",true,"في سورة مريم."],
+["كل الأنبياء المذكورين في القرآن من العرب.",false,"ليسوا كلهم عرباً، فمنهم من أُرسل إلى بني إسرائيل كموسى وعيسى عليهما السلام."],
+["أرسل الله غراباً ليُري ابن آدم كيف يواري سوأة أخيه.",true,"في سورة المائدة."],
+["رفع إبراهيم وإسماعيل عليهما السلام قواعد الكعبة.",true,"في سورة البقرة."],
+["ذُكرت النملة في سورة النحل.",false,"ذُكرت في سورة النمل، أما سورة النحل فسُمّيت باسم النحل."],
+["أراد أصحاب الفيل هدم الكعبة.",true,"في سورة الفيل."],
+["أوصى لقمان ابنه ألا يشرك بالله.",true,"في سورة لقمان."],
+["حطّم إبراهيم عليه السلام أصنام قومه إلا كبيراً لهم.",true,"في سورة الأنبياء."],
+["تكلّم عيسى عليه السلام وهو في المهد.",true,"في سورة مريم."],
+["سبّح يونس عليه السلام في بطن الحوت فنجّاه الله.",true,"في سورتي الأنبياء والصافات."],
+["عاش موسى عليه السلام صغيراً في بيت فرعون.",true,"في سورة القصص."]
+];
+const WS=`الصراط|الطريق الواضح|1
+المستقيم|الذي لا اعوجاج فيه|1
+الدين|الجزاء والحساب (في قوله: يوم الدين)|1
+نستعين|نطلب العون|1
+المغضوب|الذين غضب الله عليهم لتركهم العمل بالحق بعد علمه|1
+الضالين|التائهين عن الطريق الحق|1
+العالمين|كل ما سوى الله من المخلوقات|1
+النبإ|الخبر العظيم|78
+مهادا|فراشاً ممهّداً للعيش|78
+أوتادا|الجبال التي تثبّت الأرض كالأوتاد|78
+سباتا|راحة وسكوناً للأبدان|78
+معاشا|وقتاً لطلب الرزق والمعيشة|78
+وهاجا|متوقداً مضيئاً (وصف للشمس)|78
+ثجاجا|كثير الانصباب (وصف للمطر)|78
+ألفافا|ملتفة بعضها ببعض|78
+مرصادا|مكان ترصّد وانتظار|78
+عبس|قطّب وجهه|80
+تولى|أعرض|80
+كورت|لُفّت وزال ضوؤها|81
+انكدرت|تناثرت وتساقطت|81
+انفطرت|انشقت|82
+المطففين|الذين ينقصون الكيل والميزان|83
+الأخدود|الشق العظيم في الأرض|85
+الطارق|النجم الذي يطلع ليلاً|86
+الثاقب|المضيء الذي يثقب الظلام بنوره|86
+الغاشية|يوم القيامة الذي يغشى الناس بأهواله|88
+خاشعة|ذليلة|88
+ناصبة|متعبة من العمل|88
+كبد|مشقة وتعب|90
+النجدين|طريقا الخير والشر|90
+العقبة|الطريق الصعب في الجبل|90
+طَحَىٰهَا|بسطها ومهّدها|91
+الضحى|أول النهار|93
+سجى|سكن وأظلم|93
+قلى|أبغضك|93
+عائلا|فقيراً|93
+نشرح|نوسّع|94
+وزرك|حملك الثقيل|94
+أنقض|أثقل|94
+تقويم|خلق معتدل متناسق|95
+علق|دم جامد|96
+القدر|العظمة والشرف|97
+البينة|الحجة الواضحة|98
+زلزلت|حُرّكت تحريكاً شديداً|99
+أثقالها|ما في جوفها من موتى وكنوز|99
+أشتاتا|متفرقين|99
+العاديات|الخيل التي تجري بسرعة|100
+ضبحا|صوت أنفاسها عند الجري|100
+لكنود|جحود لنعم ربه|100
+القارعة|يوم القيامة تقرع القلوب بهوله|101
+العهن|الصوف|101
+المنفوش|المتطاير المتفرق|101
+التكاثر|التفاخر بكثرة المال والأولاد|102
+العصر|الزمان|103
+خسر|خسارة وهلاك|103
+تواصوا|أوصى بعضهم بعضاً|103
+همزة|يعيب الناس بالإشارة والغمز|104
+لمزة|يعيب الناس بالكلام|104
+الحطمة|النار التي تحطم ما يُلقى فيها|104
+مؤصدة|مغلقة|104
+كيدهم|مكرهم وتدبيرهم|105
+أبابيل|جماعات متفرقة|105
+سجيل|طين متحجّر|105
+عصف|ورق الزرع اليابس|105
+مأكول|أكلته الدواب وتبعثر|105
+إيلاف|ألفة واعتياد|106
+الماعون|ما يُنتفع به ويُعار كأدوات البيت|107
+يدع|يدفع بقسوة|107
+يحض|يحثّ|107
+ساهون|غافلون|107
+الكوثر|الخير الكثير|108
+وانحر|اذبح|108
+شانئك|مبغضك|108
+الأبتر|المقطوع عنه كل خير|108
+أفواجا|جماعات|110
+توابا|كثير القبول للتوبة|110
+تبت|خسرت وهلكت|111
+مسد|حبل من ليف|111
+حمالة|التي تحمل الشوك والحطب|111
+جيدها|عنقها|111
+أحد|واحد لا نظير له|112
+الصمد|الذي تقصده الخلائق في حاجاتها|112
+كفوا|مثيلاً ونظيراً|112
+الفلق|الصبح|113
+غاسق|الليل إذا اشتد ظلامه|113
+وقب|دخل ظلامه|113
+النفاثات|الساحرات اللاتي ينفخن في العقد|113
+حاسد|متمنٍّ زوال النعمة عن غيره|113
+الوسواس|الشيطان الذي يوسوس|114
+الخناس|الذي يختفي إذا ذُكر الله|114`;
+const PR=[
+["آدم","أبو البشر، خلقه الله من طين وأسجد له الملائكة وأسكنه الجنة.","سورتا البقرة والأعراف"],
+["إدريس","وصفه الله بأنه صدّيق نبي، ورفعه مكاناً علياً.","سورة مريم"],
+["نوح","أول رسول إلى أهل الأرض، بنى السفينة ونجا بها المؤمنون من الطوفان.","سورتا هود ونوح"],
+["هود","أُرسل إلى قوم عاد، ودعاهم إلى عبادة الله وحده.","سورة هود"],
+["صالح","أُرسل إلى قوم ثمود، وكانت آيته ناقة الله.","سورتا الأعراف والشعراء"],
+["إبراهيم","خليل الله، حطّم الأصنام ونجّاه الله من النار، ورفع قواعد الكعبة مع ابنه إسماعيل.","سورتا البقرة والأنبياء"],
+["لوط","نصح قومه وحذّرهم فلم يستجيبوا، فنجّاه الله وأهله وأهلك المكذّبين.","سورتا هود والأعراف"],
+["إسماعيل","ابن إبراهيم، وصفه الله بصادق الوعد، وشارك أباه في بناء الكعبة.","سورتا مريم والبقرة"],
+["إسحاق","ابن إبراهيم، بشّرت به الملائكة إبراهيم وزوجه.","سورة هود"],
+["يعقوب","ابن إسحاق، وأبو يوسف، ويُلقّب بإسرائيل.","سورتا يوسف والبقرة"],
+["يوسف","ألقاه إخوته في البئر، ثم صار عزيز مصر، وقصته «أحسن القصص».","سورة يوسف"],
+["أيوب","مثال الصبر على البلاء، فكشف الله ضرّه وشفاه.","سورتا الأنبياء وص"],
+["شعيب","أُرسل إلى أهل مدين ونهاهم عن تطفيف الكيل والميزان.","سورتا هود والأعراف"],
+["موسى","كليم الله، وأكثر الأنبياء ذكراً في القرآن، أنجى الله به بني إسرائيل من فرعون.","سور كثيرة منها طه والقصص"],
+["هارون","أخو موسى ووزيره، سأل موسى ربه أن يشركه في أمره.","سورة طه"],
+["داود","آتاه الله الزبور وألان له الحديد، وقتل جالوت.","سورتا ص والبقرة"],
+["سليمان","ابن داود، سخّر الله له الريح والجن، وعلّمه منطق الطير.","سورتا النمل وسبأ"],
+["إلياس","دعا قومه إلى ترك عبادة بعل وعبادة الله وحده.","سورة الصافات"],
+["اليسع","ذكره الله مع الأخيار من الأنبياء.","سورة ص"],
+["يونس","ذو النون، ابتلعه الحوت فسبّح الله في بطنه فنجّاه.","سورتا يونس والصافات"],
+["ذو الكفل","ذكره الله في الصابرين الصالحين.","سورتا الأنبياء وص"],
+["زكريا","كفل مريم، ورزقه الله يحيى على كبر سنه.","سورتا مريم وآل عمران"],
+["يحيى","ابن زكريا، آتاه الله الحكم صبياً وكان براً بوالديه.","سورة مريم"],
+["عيسى","وُلد من مريم بلا أب، وأيّده الله بالمعجزات وبشّر بالنبي بعده.","سورتا مريم والمائدة"],
+["محمد ﷺ","خاتم النبيين، أُنزل عليه القرآن، وأرسله الله رحمة للعالمين.","سور كثيرة منها محمد والفتح"]
+];
+const FT=[
+"عدد سور القرآن الكريم ١١٤ سورة، وعدد أجزائه ٣٠ جزءاً.",
+"أطول سورة في القرآن هي سورة البقرة، وعدد آياتها ٢٨٦ آية.",
+"أقصر سورة في القرآن هي سورة الكوثر، وعدد آياتها ٣ آيات.",
+"أول ما نزل من القرآن الآيات الأولى من سورة العلق، وفيها كلمة «اقرأ».",
+"سورة الفاتحة تُسمّى أمّ الكتاب والسبع المثاني، ونقرؤها في كل ركعة من الصلاة.",
+"آية الكرسي في سورة البقرة، وقد جاء في الحديث أنها أعظم آية في كتاب الله.",
+"جاء في الحديث الصحيح أن سورة الإخلاص تعدل ثلث القرآن.",
+"سورة التوبة هي السورة الوحيدة التي لا تبدأ بالبسملة.",
+"سورة مريم هي السورة الوحيدة التي سُمّيت باسم امرأة.",
+"من السور المسمّاة بأسماء حيوانات: البقرة والنحل والنمل والعنكبوت والفيل.",
+"موسى عليه السلام أكثر الأنبياء ذكراً بالاسم في القرآن الكريم.",
+"نزل القرآن الكريم على النبي ﷺ في نحو ٢٣ سنة.",
+"ليلة القدر خير من ألف شهر، وفيها نزل القرآن الكريم.",
+"يُستحب قراءة سورة الكهف يوم الجمعة.",
+"كررت سورة الرحمن آية «فبأي آلاء ربكما تكذبان» إحدى وثلاثين مرة.",
+"أطول آية في القرآن هي آية الدَّين في سورة البقرة.",
+"قُسّم القرآن إلى ٣٠ جزءاً و٦٠ حزباً لتسهيل القراءة والمراجعة.",
+"من أسماء القرآن: الفرقان والذكر والنور والكتاب.",
+"تُسمّى سورتا البقرة وآل عمران «الزهراوين».",
+"أنزل الله القرآن في شهر رمضان.",
+"قصة يوسف عليه السلام جاءت كاملة في سورة واحدة، ووصفها الله بأنها أحسن القصص.",
+"جمع أبو بكر الصديق رضي الله عنه القرآن في مصحف واحد، ثم نسخ عثمان رضي الله عنه عدة مصاحف.",
+"معنى «الفرقان»: الذي يفرّق بين الحق والباطل.",
+"كان النبي ﷺ يقرأ قبل النوم سورة الإخلاص والمعوّذتين.",
+"تبدأ ٢٩ سورة بالحروف المقطّعة مثل «الم»."
+];
+const DU=[
+["دعاء خير الدنيا والآخرة",2,201,201],
+["دعاء قبول العمل",2,127,127],
+["دعاء عدم المؤاخذة بالنسيان والخطأ",2,286,286],
+["دعاء الثبات على الهداية",3,8,8],
+["دعاء الاستغفار والثبات",3,147,147],
+["دعاء آدم وحواء عليهما السلام",7,23,23],
+["دعاء شرح الصدر وتيسير الأمر",20,25,28],
+["دعاء زيادة العلم",20,114,114],
+["دعاء الرحمة بالوالدين",17,24,24],
+["دعاء قرّة العين بالأهل والذرية",25,74,74],
+["دعاء شكر النعمة",27,19,19],
+["دعاء يونس عليه السلام",21,87,87],
+["دعاء موسى عليه السلام",28,24,24],
+["دعاء إقامة الصلاة",14,40,40],
+["دعاء أهل الكهف",18,10,10],
+["دعاء الحفظ من الشياطين",23,97,98],
+["دعاء نوح عليه السلام للوالدين",71,28,28]
+];
+
+const ce=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const rnd=n=>Math.floor(Math.random()*n),pick=a=>a[rnd(a.length)];
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nkey=t=>norm(t).replace(/ا/g,"");
+const words=t=>t.split(/\s+/).filter(x=>x);
+const tip=(h,ms)=>{document.querySelectorAll(".tst").forEach(x=>x.remove());const e=ce("div","tst",h);document.body.append(e);setTimeout(()=>e.remove(),ms||2600)};
+if(!S.gsc)S.gsc="juz";
+if(typeof S.wm!=="boolean")S.wm=false;
+
+const WD=WS.split("\n").map(l=>{const a=l.split("|");return[a[0],a[1],+a[2]]});
+const DK=new Map();
+WD.forEach(([w,m,s],i)=>{let n=norm(w);if(n.startsWith("ال")&&n.length>3)n=n.slice(2);DK.set(s+":"+n.replace(/ا/g,""),i)});
+function wkeys(t){const n=norm(t),a=[n];if(/^[وف]/.test(n))a.push(n.slice(1));const b=[];a.forEach(x=>{b.push(x);if(/^[بكل]/.test(x))b.push(x.slice(1));if(/^لل/.test(x))b.push(x.slice(2))});const r=[];b.forEach(x=>{r.push(x);if(x.startsWith("ال")&&x.length>3)r.push(x.slice(2))});return r.map(x=>x.replace(/ا/g,""))}
+
+/* ===== الهيكل ===== */
+const sh=ce("section","sheet",'<div class="hd"><b>🎮 الألعاب والمسابقات</b><button class="x">✕</button></div><div id="gbd"></div>');
+sh.id="sh-gm";document.body.append(sh);
+sh.querySelector(".x").onclick=()=>closeAll();
+const B=sh.querySelector("#gbd");
+const R=(...n)=>{B.innerHTML="";B.append(...n);sh.scrollTop=0};
+
+/* ===== الصوت ===== */
+const GA=new Audio();let gBtn=null;
+const vurl=(si,k)=>RC.sds.a+p3(si+1)+p3(k)+".mp3";
+function gStop(){try{GA.pause()}catch(e){}GA.onended=null;if(gBtn){gBtn.textContent=gBtn.dataset.t||"▶ استمع";gBtn=null}}
+function playList(urls,btn){
+  if(gBtn===btn){gStop();return}
+  gStop();try{if(typeof stopA==="function")stopA()}catch(e){}
+  gBtn=btn;btn.dataset.t=btn.dataset.t||btn.textContent;btn.textContent="⏹ إيقاف";
+  let i=0;
+  const one=()=>{GA.src=urls[i];const p=GA.play();if(p)p.catch(()=>{if(gBtn===btn){tip("تعذّر تشغيل الصوت – تحقق من الاتصال");gStop()}})};
+  GA.onended=()=>{if(++i<urls.length)one();else gStop()};
+  GA.onerror=()=>{if(gBtn){tip("تعذّر تحميل الصوت – تحقق من الاتصال");gStop()}};
+  one();
+}
+function vbtns(si,k){
+  const r=ce("div","row");
+  const a=ce("button","","▶ استمع"),b=ce("button","","📖 في المصحف");
+  a.onclick=()=>playList([vurl(si,k)],a);b.onclick=()=>go(si,k);
+  r.append(a,b);return r;
+}
+
+/* ===== النطاق واختيار الآيات ===== */
+function scopeIdx(k){
+  if(k==="cur")return[S.s];
+  if(k==="mem")return S.mem.slice();
+  if(k==="all")return Array.from({length:114},(_,i)=>i);
+  return Array.from({length:37},(_,i)=>77+i);
+}
+function scopeSel(){
+  const l=ce("label","",'<span>النطاق</span>'),s=ce("select");
+  SC.forEach(([k,n])=>{const o=ce("option","",n);o.value=k;s.append(o)});
+  s.value=S.gsc;s.onchange=()=>{S.gsc=s.value;save()};l.append(s);return l;
+}
+function vpool(minW){
+  const r=[];
+  scopeIdx(S.gsc).forEach(si=>Q[si].v.forEach((t,i)=>{if(words(t).length>=minW)r.push([si,i+1])}));
+  return r;
+}
+function pickVerse(minW){for(let m=minW;m>=1;m--){const p=vpool(m);if(p.length)return pick(p)}return null}
+function rndWord(){const si=pick(scopeIdx(S.gsc));return pick(words(pick(Q[si].v)))}
+function noScope(){
+  R(top("لا توجد آيات"),ce("div","xc","لا توجد آيات في هذا النطاق. إن اخترت «السور التي حفظتها» فعلّم أولاً سورة بزر «حفظتُ السورة»، أو غيّر النطاق."));
+}
+
+/* ===== عناصر مشتركة ===== */
+function top(title){
+  const r=ce("div","row gtop",'<button>→ الألعاب</button><b style="flex:1;text-align:center">'+title+'</b>');
+  r.querySelector("button").onclick=()=>{gStop();hub()};return r;
+}
+function intro(title,desc,scope,start){
+  const b=ce("button","gst","▶ ابدأ");b.onclick=start;
+  const n=[top(title),ce("div","xc",desc)];
+  if(scope)n.push(scopeSel());
+  n.push(b);R(...n);
+}
+function qround(cfg){
+  const total=cfg.total||10;let n=0,s=0,lock=false,cur;
+  const end=()=>{
+    const r=s/total,m=r>=.9?"ما شاء الله! 🏆":r>=.6?"أحسنت! 👏":"حاول مرة أخرى، فالتكرار يُثبّت العلم 🌱";
+    const c=ce("div","xc",'<div class="av">'+m+'</div><div style="text-align:center">نتيجتك: '+num(s)+' من '+num(total)+'</div>');
+    const row=ce("div","row"),a=ce("button","","🔁 جولة جديدة"),b=ce("button","","الألعاب");
+    a.onclick=cfg.again;b.onclick=hub;row.append(a,b);
+    R(top(cfg.title),c,row);
+  };
+  const next=()=>{
+    if(n>=total){end();return}
+    cur=cfg.gen();
+    if(!cur){(cfg.empty||hub)();return}
+    lock=false;
+    const q=ce("div","gq",cur.q),o=ce("div","opts"+(cfg.qfont?" qf":"")),f=ce("div","gf");
+    cur.o.forEach((t,i)=>{const b=ce("button");b.textContent=t;b.dataset.i=i;o.append(b)});
+    R(top(cfg.title),ce("div","qs","السؤال "+num(n+1)+" من "+num(total)+" · الصحيح: "+num(s)),q,o,f);
+    if(cur.mount)cur.mount(q);
+    o.onclick=e=>{
+      const b=e.target.closest("button");if(!b||lock)return;
+      lock=true;n++;
+      const ok=cur.o[+b.dataset.i]===cur.a;
+      if(ok){s++;b.classList.add("ok")}else{b.classList.add("bad");[...o.children].forEach(x=>{if(x.textContent===cur.a)x.classList.add("ok")})}
+      if(cur.reveal)cur.reveal(q);
+      if(cur.ex)f.append(ce("div","xc",cur.ex));
+      if(cur.after)cur.after(f);
+      const nb=ce("button","",n>=total?"النتيجة":"التالي ←");nb.onclick=next;f.append(nb);
+    };
+  };
+  next();
+}
+
+/* ===== الصفحة الرئيسية للألعاب ===== */
+const G=[
+ ["fill","🧩","أكمل الآية","اختر الكلمة الناقصة",gFill],
+ ["who","❓","من أنا؟","تلميحات عن نبي أو مخلوق أو مكان",gWho],
+ ["card","🃏","بطاقات الحفظ","اقلب البطاقة وراجع الآية",gCard],
+ ["tf","✅","صح أم خطأ","في القصص القرآنية",gTF],
+ ["word","📖","معاني الكلمات","اختبار وقاموس مبسّط",gWord],
+ ["map","🗺️","خريطة الأنبياء","ترتيبهم الزمني",gMap],
+ ["dua","🤲","أدعية القرآن","بالصوت والنص",gDua],
+ ["fact","💡","هل تعلم؟","معلومات قرآنية",gFact],
+ ["quiz","🧠","اختبار المصحف","أسئلة عامة عن القرآن",()=>{S.xt=8;save();openSheet("sh-m")}]
+];
+function hub(){
+  gStop();
+  const d=Math.floor(Date.now()/864e5),vs=VOD[d%VOD.length],si=vs[0]-1,vk=vs[1];
+  const hero=ce("div","gh",'<small>آية اليوم</small><div class="qv">'+esc(Q[si].v[vk-1])+' ﴿'+num(vk)+'﴾</div><small>سورة '+esc(Q[si].n)+'</small><div class="row"><button class="l">▶ استمع</button><button class="o">📖 في المصحف</button></div>');
+  hero.querySelector(".l").onclick=e=>playList([vurl(si,vk)],e.target);
+  hero.querySelector(".o").onclick=()=>go(si,vk);
+  const f=ce("div","xc",'💡 <span style="font-weight:bold">هل تعلم؟</span> '+esc(FT[d%FT.length]));
+  const g=ce("div","gg");
+  G.forEach(([id,ic,t,ds,fn],i)=>{
+    const b=ce("button","gc"+(i===G.length-1?" w2":""),'<span class="ic">'+ic+'</span><b>'+t+'</b><small>'+ds+'</small>');
+    b.onclick=fn;g.append(b);
+  });
+  R(hero,f,g);
+}
+
+/* ===== ١: أكمل الآية ===== */
+function gFill(){
+  intro("أكمل الآية","تظهر آية ينقصها كلمة، اختر الكلمة الصحيحة من بين ٤ خيارات. ١٠ أسئلة في كل جولة.",true,()=>qround({title:"أكمل الآية",again:gFill,gen:genFill,empty:noScope,qfont:true}));
+}
+function genFill(){
+  const v=pickVerse(4);if(!v)return null;
+  const si=v[0],k=v[1],ws=words(Q[si].v[k-1]);
+  let c=ws.map((w,i)=>i).filter(i=>nkey(ws[i]).length>=3);
+  if(!c.length)c=ws.map((w,i)=>i);
+  const j=pick(c),ans=ws[j],seen=new Set([nkey(ans)]),o=[ans];
+  shuf(ws).forEach(w=>{const x=nkey(w);if(o.length<4&&x.length>=2&&!seen.has(x)){seen.add(x);o.push(w)}});
+  for(let t=0;o.length<4&&t<300;t++){const w=rndWord(),x=nkey(w);if(x.length>=2&&!seen.has(x)){seen.add(x);o.push(w)}}
+  const mk=f=>ws.map((w,i)=>i===j?f:esc(w)).join(" ");
+  const full='<div class="qv">'+mk('<span class="fil">'+esc(ans)+'</span>')+' ﴿'+num(k)+'﴾</div>';
+  return{
+    q:'<div class="qs">اختر الكلمة الناقصة</div><div class="qv">'+mk('<span class="blank">……</span>')+' ﴿'+num(k)+'﴾</div>',
+    o:shuf(o),a:ans,
+    ex:"سورة "+esc(Q[si].n)+" · الآية "+num(k),
+    reveal:q=>{q.innerHTML=full},
+    after:f=>f.append(vbtns(si,k))
+  };
+}
+
+/* ===== ٣: من أنا؟ ===== */
+function gWho(){
+  const deck=shuf(RD).slice(0,8);let i=0;
+  qround({title:"من أنا؟",total:deck.length,again:gWho,gen:()=>{
+    const r=deck[i++];
+    const o=shuf([r.a,...shuf(PL[r.p].filter(x=>x!==r.a)).slice(0,3)]);
+    let h=1,hl,hb;
+    const rd=()=>{hl.innerHTML=r.h.slice(0,h).map((t,x)=>"<div><b style=\"color:var(--green)\">"+num(x+1)+"</b> "+esc(t)+"</div>").join("");hb.style.display=h>=r.h.length?"none":""};
+    return{
+      q:'<div class="qs">من أنا؟</div><div class="hl"></div><button class="hb">💡 تلميح آخر</button>',
+      o,a:r.a,ex:esc(r.e),
+      mount:q=>{hl=q.querySelector(".hl");hb=q.querySelector(".hb");hb.onclick=()=>{h++;rd()};rd()},
+      reveal:()=>{h=r.h.length;rd()}
+    };
+  }});
+}
+
+/* ===== ٥: بطاقات الحفظ ===== */
+function gCard(){
+  intro("بطاقات الحفظ","تظهر بداية الآية، حاول تذكّر تكملتها ثم اقلب البطاقة للتأكد. اضغط «عرفتها» أو «أحتاج مراجعة»، والبطاقات التي تحتاج مراجعة تعود إليك مرة أخرى.",true,startCards);
+}
+function startCards(){
+  const deck=[],seen=new Set();
+  for(let t=0;deck.length<10&&t<80;t++){
+    const v=pickVerse(3);if(!v)break;
+    const key=v[0]+":"+v[1];if(seen.has(key))continue;
+    seen.add(key);deck.push(v);
+  }
+  if(!deck.length){noScope();return}
+  let known=0;const redo=[],retried=new Set();
+  const fin=()=>{
+    const c=ce("div","xc",'<div class="av">أتممت البطاقات 🎉</div><div style="text-align:center">عرفتها: '+num(known)+' · تحتاج مراجعة: '+num(redo.length)+'</div>');
+    const n=[top("بطاقات الحفظ"),c];
+    if(redo.length){
+      n.push(ce("div","hint","آيات للمراجعة (اضغط للفتح في المصحف):"));
+      redo.forEach(([si,k])=>{
+        const d=ce("div","it",'<b>'+esc(Q[si].n)+' '+num(k)+'</b><span></span>');
+        d.querySelector("span").textContent=words(Q[si].v[k-1]).slice(0,5).join(" ")+" …";
+        d.onclick=()=>go(si,k);n.push(d);
+      });
+    }
+    const r=ce("div","row"),a=ce("button","","🔁 جولة جديدة"),b=ce("button","","الألعاب");
+    a.onclick=startCards;b.onclick=hub;r.append(a,b);n.push(r);R(...n);
+  };
+  const show=()=>{
+    if(!deck.length){fin();return}
+    const cv=deck[0],si=cv[0],k=cv[1],ws=words(Q[si].v[k-1]),n=Math.max(1,Math.min(ws.length-1,Math.max(2,S.keep||2)));
+    const card=ce("div","xc fc",'<div class="qs">أكمل الآية</div><div class="qv">'+esc(ws.slice(0,n).join(" "))+' <span class="blank">……</span></div>');
+    const f=ce("div","gf"),fl=ce("button","","🔄 اقلب البطاقة");
+    f.append(fl);
+    R(top("بطاقات الحفظ"),ce("div","qs","المتبقي: "+num(deck.length)+" · عرفتها: "+num(known)+" · للمراجعة: "+num(redo.length)),card,f);
+    fl.onclick=()=>{
+      card.innerHTML='<div class="qv">'+esc(Q[si].v[k-1])+' ﴿'+num(k)+'﴾</div><div class="qs">سورة '+esc(Q[si].n)+' · الآية '+num(k)+'</div>';
+      f.innerHTML="";
+      f.append(vbtns(si,k));
+      const r=ce("div","row"),y=ce("button","","✓ عرفتها"),m=ce("button","","↻ أحتاج مراجعة");
+      y.onclick=()=>{deck.shift();known++;show()};
+      m.onclick=()=>{
+        const key=si+":"+k;deck.shift();
+        if(!redo.some(x=>x[0]===si&&x[1]===k))redo.push(cv);
+        if(!retried.has(key)){retried.add(key);deck.push(cv)}
+        show();
+      };
+      r.append(y,m);f.append(r);
+    };
+  };
+  show();
+}
+
+/* ===== ٧: صح أم خطأ ===== */
+function gTF(){
+  const deck=shuf(TF).slice(0,10);let i=0;
+  qround({title:"صح أم خطأ",total:deck.length,again:gTF,gen:()=>{
+    const t=deck[i++];
+    return{q:esc(t[0]),o:["✅ صح","❌ خطأ"],a:t[1]?"✅ صح":"❌ خطأ",ex:esc(t[2])};
+  }});
+}
+
+/* ===== ١٢: معاني الكلمات ===== */
+function gWord(){
+  const cb=ce("label","",'<span>إظهار المعاني أثناء القراءة (اضغط الكلمة المسطّرة)</span><input type="checkbox">');
+  const ck=cb.querySelector("input");ck.checked=S.wm;
+  ck.onchange=()=>{S.wm=ck.checked;save();build()};
+  const a=ce("button","gst","🎯 اختبار معاني الكلمات"),b=ce("button","gst","📚 قاموس الكلمات");
+  a.onclick=gWordQuiz;b.onclick=gDict;
+  R(top("معاني الكلمات"),ce("div","xc","قاموس مبسّط لكلمات من سورة الفاتحة وجزء عمّ. عند تفعيل الخيار أدناه تظهر الكلمات التي لها معنى بخط منقّط أثناء القراءة، وعند الضغط عليها يظهر معناها (لا يعمل في وضع الإخفاء)."),cb,a,b);
+}
+function gWordQuiz(){
+  const deck=shuf(WD).slice(0,10);let i=0;
+  qround({title:"معاني الكلمات",total:deck.length,again:gWordQuiz,gen:()=>{
+    const w=deck[i++];
+    const ms=shuf(WD.filter(x=>x[1]!==w[1])).slice(0,3).map(x=>x[1]);
+    return{
+      q:'ما معنى كلمة<div class="qv" style="color:var(--green)">'+esc(w[0])+'</div><small>(سورة '+esc(Q[w[2]-1].n)+')</small>',
+      o:shuf([w[1],...ms]),a:w[1]
+    };
+  }});
+}
+function gDict(){
+  const q=ce("input");q.type="search";q.placeholder="ابحث عن كلمة (دون تشكيل)";q.style.cssText="width:100%;box-sizing:border-box";
+  const l=ce("div");
+  const draw=()=>{
+    const t=norm(q.value.trim());l.innerHTML="";
+    WD.forEach(w=>{
+      if(t&&!norm(w[0]).includes(t))return;
+      const d=ce("div","it",'<span style="flex:none;min-width:5.5em;font-size:20px"></span><div style="flex:1;font-size:13px"></div>');
+      d.firstChild.textContent=w[0];
+      d.lastChild.innerHTML=esc(w[1])+' <small style="color:var(--mute)">(سورة '+esc(Q[w[2]-1].n)+')</small>';
+      l.append(d);
+    });
+    if(!l.children.length)l.textContent="لا نتائج";
+  };
+  q.oninput=draw;
+  R(top("قاموس الكلمات"),q,l);draw();
+}
+
+/* ===== ١٤: خريطة الأنبياء ===== */
+function gMap(){
+  const l=ce("div","tl");
+  PR.forEach(([n,d,s],i)=>{
+    const it=ce("div","tli",'<i>'+num(i+1)+'</i><b>'+esc(n)+'</b><div class="td">'+esc(d)+'<br><small>'+esc(s)+'</small></div>');
+    it.onclick=()=>it.classList.toggle("op");
+    l.append(it);
+  });
+  R(top("خريطة الأنبياء"),ce("div","hint","الأنبياء الذين ذُكروا في القرآن مرتّبين تقريباً بحسب الزمن، والترتيب فيه اختلاف بين أهل العلم في بعضهم. اضغط على الاسم لمعرفة قصته."),l);
+}
+
+/* ===== ١٧: أدعية القرآن ===== */
+function gDua(){
+  const n=[top("أدعية القرآن"),ce("div","hint","تُعرض الآية كاملة كما وردت في المصحف، ويمكنك الاستماع إليها أو فتحها في المصحف.")];
+  DU.forEach(([t,s,f,to])=>{
+    const si=s-1,urls=[],ts=[];
+    for(let k=f;k<=to;k++){urls.push(vurl(si,k));ts.push(Q[si].v[k-1])}
+    const c=ce("div","xc",'<b>'+esc(t)+'</b><div class="qv">'+esc(ts.join(" "))+'</div><small>سورة '+esc(Q[si].n)+' · '+(f===to?"الآية "+num(f):"الآيات "+num(f)+" – "+num(to))+'</small>');
+    const r=ce("div","row"),a=ce("button","","▶ استمع"),b=ce("button","","📖 في المصحف");
+    a.onclick=()=>playList(urls,a);b.onclick=()=>go(si,f);
+    r.append(a,b);c.append(r);n.push(c);
+  });
+  R(...n);
+}
+
+/* ===== ٢٠: هل تعلم؟ ===== */
+function gFact(){
+  let i=Math.floor(Date.now()/864e5)%FT.length;
+  const c=ce("div","xc",""),b=ce("button","gst","💡 معلومة أخرى");
+  const rd=()=>{c.innerHTML='<div class="av" style="font-size:20px;line-height:2">'+esc(FT[i])+'</div><div class="qs">'+num(i+1)+' من '+num(FT.length)+'</div>'};
+  b.onclick=()=>{let j;do{j=rnd(FT.length)}while(j===i&&FT.length>1);i=j;rd()};
+  rd();R(top("هل تعلم؟"),c,b);
+}
+
+/* ===== ربط التطبيق ===== */
+const o1=openSheet;
+openSheet=function(id){o1(id);if(id==="sh-gm"&&sh.classList.contains("open"))hub()};
+const c1=closeAll;
+closeAll=function(){c1();gStop()};
+
+const bn=ce("button","gmb",'<span>🎮 الألعاب والمسابقات</span><small>العب وتعلّم مع العائلة</small>');
+$("stat").after(bn);bn.onclick=()=>openSheet("sh-gm");
+
+/* معاني الكلمات أثناء القراءة */
+function markW(){
+  if(!S.wm)return;
+  const s=S.s+1;
+  txt.querySelectorAll(".w").forEach(e=>{
+    for(const k of wkeys(e.textContent)){
+      const i=DK.get(s+":"+k);
+      if(i!==undefined){e.classList.add("wd");e.dataset.m=i;break}
+    }
+  });
+}
+const b0=build;
+build=function(){b0.apply(this,arguments);markW()};
+txt.addEventListener("click",e=>{
+  if(!S.wm||S.hidden)return;
+  const w=e.target.closest(".w.wd");if(!w)return;
+  const d=WD[+w.dataset.m];
+  tip("<b>"+esc(d[0])+"</b>: "+esc(d[1]),4500);
+});
+const wl=ce("label","",'<span>إظهار معاني الكلمات (اضغط الكلمة المسطّرة)</span><input type="checkbox" id="wmc">');
+$("wake").closest("label").after(wl);
+$("wmc").checked=S.wm;
+$("wmc").onchange=e=>{S.wm=e.target.checked;save();build()};
+markW();
 
 })();
 </script>
